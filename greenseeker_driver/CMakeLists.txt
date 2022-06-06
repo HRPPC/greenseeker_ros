@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   greenseeker_msgs
 )
 
+find_package(Boost REQUIRED COMPONENTS system)
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -14,6 +16,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS roscpp greenseeker_msgs
+  DEPENDS Boost
 )
 
 ###########
@@ -22,6 +25,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME}

@@ -1,0 +1,4 @@
+frame_id: "greenseeker"
+loop_rate: 100 # hz
+port: "/dev/ttyUSB0"
+baud: "9600"
