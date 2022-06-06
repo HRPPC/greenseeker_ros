@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>greenseeker_driver</name>
+  <version>0.0.1</version>
+  <description>greenseeker_driver package to run trimble greenseeker</description>
+
+  <author email="pri235@csiro.au">Michael Pritchard</author>
+  <maintainer email="pri235@csiro.au">Michael Pritchard</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>greenseeker_msgs</depend>
+
+</package>
