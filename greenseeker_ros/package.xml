@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>greenseeker_ros</name>
+  <version>0.0.1</version>
+  <description>The trimble greenseeker metapackage</description>
+
+  <author email="michael.pritchard@csiro.au">michael pritchard</author>
+  <maintainer email="michael.pritchard@csiro.au">michael pritchard</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>greenseeker_msgs</exec_depend>
+  <exec_depend>greenseeker_description</exec_depend>
+  <exec_depend>greenseeker_driver</exec_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <metapackage />
+  </export>
+</package>

@@ -1,0 +1,25 @@
+<package>
+  <name>greenseeker_msgs</name>
+  <version>0.0.1</version>
+  <description>
+    This package provides message and service formats for trimble greenseeker
+  </description>
+
+  <author email="michael.pritchard@csiro.au">michael pritchard</author>
+  <maintainer email="michael.pritchard@csiro.au">michael pritchard</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <run_depend>message_runtime</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+    <architecture_independent/>
+  </export>
+
+</package>

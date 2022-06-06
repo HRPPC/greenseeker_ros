@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>greenseeker_description</name>
+  <version>0.0.1</version>
+  <description>
+    <p>greenseeker_description: A package with configs and urdf files for trimble greenseeker</p>
+  </description>
+
+  <author email="michael.pritchard@csiro.au">michael pritchard</author>
+  <maintainer email="michael.pritchard@csiro.au">michael pritchard</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>xacro</depend>
+
+</package>
