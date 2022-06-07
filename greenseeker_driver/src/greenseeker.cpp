@@ -24,20 +24,35 @@ const bool GreenSeeker::disconnect()
 
 const bool GreenSeeker::read()
 {
+  std::string line = "";
+
   try
   {
     // read serial
-    std::string line = serial_->readLine();
+    line = serial_->readLine();
+  }
+  catch (boost::system::system_error& e)
+  {
+    ROS_ERROR_STREAM("Error: " << e.what());
+    return false;
+  }
 
-    // create a packet message
-    greenseeker_msgs::GreenSeekerPacket msg;
-    msg.header.stamp = ros::Time::now();
-    msg.header.frame_id = frame_id_;
+  // create a packet message
+  greenseeker_msgs::GreenSeekerPacket msg;
+  msg.header.stamp = ros::Time::now();
+  msg.header.frame_id = frame_id_;
+  msg.red_rfl = -1.0;
+  msg.nir_rfl = -1.0;
 
-    // decode packet
-    // split by comma
-    std::string delimiter = ",";
+  // decode packet
+  // split by comma
+  std::string delimiter = ",";
 
+  // how many columns
+  size_t cols = std::count(line.begin(), line.end(), ',');
+
+  if (cols >= 5)
+  {
     // time
     msg.time = std::strtoull(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
     line.erase(0, line.find(delimiter) + delimiter.length());
@@ -53,24 +68,22 @@ const bool GreenSeeker::read()
     // irvi
     msg.irvi = std::stod(line.substr(0, line.find(delimiter)));
     line.erase(0, line.find(delimiter) + delimiter.length());
+  }
 
+  if (cols >= 7)
+  {
     // red_rfl
     msg.red_rfl = std::stod(line.substr(0, line.find(delimiter)));
     line.erase(0, line.find(delimiter) + delimiter.length());
     // nir_rfl
     msg.nir_rfl = std::stod(line.substr(0, line.find(delimiter)));
     line.erase(0, line.find(delimiter) + delimiter.length());
-
-    // publish message
-    packet_pub_.publish(msg);
-
-    return true;
   }
-  catch (boost::system::system_error& e)
-  {
-    ROS_ERROR_STREAM("Error: " << e.what());
-    return false;
-  }
+
+  // publish message
+  packet_pub_.publish(msg);
+
+  return true;
 }
 
 void GreenSeeker::read_timer_cb(const ros::TimerEvent& event)

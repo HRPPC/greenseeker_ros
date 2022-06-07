@@ -13,7 +13,9 @@ public:
   GreenSeeker(ros::NodeHandle nh, ros::NodeHandle pnh) : nh_(nh), pnh_(pnh), loop_rate_(100.0), frame_id_("greenseeker")
   {
     // get loop rate
-    loop_rate_ = pnh_.param("loop_rate", loop_rate_);
+    double loop_hz = pnh_.param("loop_rate", 100.0);
+    loop_rate_ = ros::Rate(loop_hz);
+
     // frame id
     frame_id_ = pnh_.param("frame_id", frame_id_);
 
