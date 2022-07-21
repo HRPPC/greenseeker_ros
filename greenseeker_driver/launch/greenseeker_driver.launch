@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="port" default="/dev/ttyUSB0" />
-    <arg name="name" default="an_ins" />
+    <arg name="name" default="greenseeker" />
     <arg name="frame_id" default="$(arg name)" />
     <arg name="baud" default="9600" />
 
     <!-- greenseeker driver node -->
-    <node name="greenseeker_driver_node" pkg="greenseeker_driver" type="greenseeker_driver_node" output="screen">
+    <node name="$(arg name)" pkg="greenseeker_driver" type="greenseeker_driver_node">
         <rosparam file="$(find greenseeker_driver)config/greenseeker.yaml" command="load"/>
         <param name="frame_id" value="$(arg frame_id)" />
         <param name="port" value="$(arg port)" />

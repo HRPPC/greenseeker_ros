@@ -88,6 +88,12 @@ const bool GreenSeeker::read()
 
 void GreenSeeker::read_timer_cb(const ros::TimerEvent& event)
 {
+  // read and publish packet
+  read();
+  ROS_DEBUG_STREAM("GreenSeeker::read_timer_cb() - read() called resetting timer");
+
+  // start polling timer again
+  read_poll_timer_ = pnh_.createTimer(loop_rate_.expectedCycleTime(), &GreenSeeker::read_timer_cb, this, true);
 }
 
 }  // namespace greenseeker_driver

@@ -20,20 +20,27 @@ public:
     frame_id_ = pnh_.param("frame_id", frame_id_);
 
     // get serial connection details
-    if (!pnh_.getParam("port", port_) && !pnh_.getParam("baud", baud_))
+    if (!pnh_.getParam("port", port_) || !pnh_.getParam("baud", baud_))
     {
       ROS_ERROR("greenseeker_driver missing serial parametes");
       return;
     }
 
+    ROS_INFO_STREAM("greenseeker_driver connecting " << port_ << " " << baud_);
+
     // try and open serial port
-    connect();
+    if (!connect())
+    {
+      ROS_FATAL("greenseeker_driver connection failed");
+      ros::shutdown();
+      return;
+    }
 
     // create a greenseeker packet message publisher
     packet_pub_ = pnh.advertise<greenseeker_msgs::GreenSeekerPacket>("packet", 20);
 
     // start polling timer
-    read_poll_timer_ = pnh_.createTimer(loop_rate_.expectedCycleTime(), &GreenSeeker::read_timer_cb, this);
+    read_poll_timer_ = pnh_.createTimer(loop_rate_.expectedCycleTime(), &GreenSeeker::read_timer_cb, this, true);
   }
 
   ~GreenSeeker()
