@@ -30,6 +30,8 @@ const bool GreenSeeker::read()
   {
     // read serial
     line = serial_->readLine();
+    ROS_DEBUG_STREAM(line);
+    // ROS_INFO_STREAM(line);
   }
   catch (boost::system::system_error& e)
   {
@@ -50,38 +52,57 @@ const bool GreenSeeker::read()
 
   // how many columns
   size_t cols = std::count(line.begin(), line.end(), ',');
-
-  if (cols >= 5)
+  if(cols) // if any commas then add 1 to get columns
   {
-    // time
-    msg.time = std::strtoull(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
-    line.erase(0, line.find(delimiter) + delimiter.length());
-    // plot
-    msg.plot = std::strtoll(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
-    line.erase(0, line.find(delimiter) + delimiter.length());
-    // count
-    msg.count = std::strtoll(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
-    line.erase(0, line.find(delimiter) + delimiter.length());
-    // ndvi
-    msg.ndvi = std::stod(line.substr(0, line.find(delimiter)));
-    line.erase(0, line.find(delimiter) + delimiter.length());
-    // irvi
-    msg.irvi = std::stod(line.substr(0, line.find(delimiter)));
-    line.erase(0, line.find(delimiter) + delimiter.length());
+    cols ++;
   }
 
-  if (cols >= 7)
+  try
   {
-    // red_rfl
-    msg.red_rfl = std::stod(line.substr(0, line.find(delimiter)));
-    line.erase(0, line.find(delimiter) + delimiter.length());
-    // nir_rfl
-    msg.nir_rfl = std::stod(line.substr(0, line.find(delimiter)));
-    line.erase(0, line.find(delimiter) + delimiter.length());
-  }
+    bool message_valid = false;
 
-  // publish message
-  packet_pub_.publish(msg);
+    if (cols >= 5)
+    {
+      // time
+      msg.time = std::strtoull(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
+      line.erase(0, line.find(delimiter) + delimiter.length());
+      // plot
+      msg.plot = std::strtoll(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
+      line.erase(0, line.find(delimiter) + delimiter.length());
+      // count
+      msg.count = std::strtoll(line.substr(0, line.find(delimiter)).c_str(), NULL, 0);
+      line.erase(0, line.find(delimiter) + delimiter.length());
+      // ndvi
+      msg.ndvi = std::stod(line.substr(0, line.find(delimiter)));
+      line.erase(0, line.find(delimiter) + delimiter.length());
+      // irvi
+      msg.irvi = std::stod(line.substr(0, line.find(delimiter)));
+      line.erase(0, line.find(delimiter) + delimiter.length());
+
+      message_valid = true;
+    }
+
+    if (cols >= 7)
+    {
+      // red_rfl
+      msg.red_rfl = std::stod(line.substr(0, line.find(delimiter)));
+      line.erase(0, line.find(delimiter) + delimiter.length());
+      // nir_rfl
+      msg.nir_rfl = std::stod(line.substr(0, line.find(delimiter)));
+      line.erase(0, line.find(delimiter) + delimiter.length());
+    }
+
+    // publish message
+    if (message_valid)
+    {
+      packet_pub_.publish(msg);
+    }
+  }
+  catch (std::invalid_argument& e)
+  {
+    ROS_ERROR_STREAM("Error: " << e.what());
+    return false;
+  }
 
   return true;
 }

@@ -3,7 +3,7 @@
     <arg name="port" default="/dev/ttyUSB0" />
     <arg name="name" default="greenseeker" />
     <arg name="frame_id" default="$(arg name)" />
-    <arg name="baud" default="9600" />
+    <arg name="baud" default="38400" />
 
     <!-- greenseeker driver node -->
     <node name="$(arg name)" pkg="greenseeker_driver" type="greenseeker_driver_node">
