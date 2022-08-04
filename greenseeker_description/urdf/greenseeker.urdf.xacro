@@ -45,7 +45,7 @@
         </joint>
 
 		<!-- sensor frame -->
-        <link name="${sensor_frame}_laser">
+        <link name="${sensor_frame}">
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
@@ -57,7 +57,7 @@
 
         <joint name="${sensor_frame}_${name}_joint" type="fixed">
             <parent link="${name}"/>
-            <child link="${sensor_frame}_laser"/>
+            <child link="${sensor_frame}"/>
             <origin xyz="${sensor_frame_dx} ${sensor_frame_dy} ${sensor_frame_dz}" rpy="${M_PI} 0 ${M_PI/2}" />
         </joint>
 
