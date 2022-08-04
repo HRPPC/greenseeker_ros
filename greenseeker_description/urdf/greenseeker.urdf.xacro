@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="greenseeker" >
+
+	<xacro:macro name="greenseeker" params="name parent sensor_frame *origin" >
+
+		<!-- sensor frame location -->
+		<xacro:property name="sensor_frame_dx" value="0.26" />
+        <xacro:property name="sensor_frame_dy" value="0.0" />
+        <xacro:property name="sensor_frame_dz" value="0.014" />
+
+		<!-- attachment link and joint -->
+		<link name="${name}">
+            <!-- visual -->
+			<visual>
+                <geometry>
+                    <!-- <mesh filename="package://greenseeker_description/meshes/greenseeker.stl"/> -->
+                    <mesh filename="package://greenseeker_description/meshes/greenseeker.dae"/>
+                </geometry>
+                <material name="White" />
+            </visual>
+
+			<!-- collision -->
+            <xacro:property name="collision_box_x" value="0.075" />
+            <xacro:property name="collision_box_y" value="0.055" />
+            <xacro:property name="collision_box_z" value="0.035" />
+            <collision>
+                <origin xyz="0 0 ${collision_box_z/2}" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${collision_box_x} ${collision_box_y} ${collision_box_z}"/>
+                </geometry>
+            </collision>
+
+            <!-- inertia -->
+            <xacro:box_maxima_in_z_inertia mass="0.1" x="${collision_box_x}" y="${collision_box_y}" z="${collision_box_z}">
+                <origin xyz="0 0 ${collision_box_z/2}" rpy="0 0 0" />
+			</xacro:box_maxima_in_z_inertia>
+
+		</link>
+
+        <!-- attachment joint-->
+        <joint name="${name}_${parent}_joint" type="fixed">
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+            <xacro:insert_block name="origin" />
+        </joint>
+
+		<!-- sensor frame -->
+        <link name="${sensor_frame}_laser">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<cylinder radius="0.02" length="0.02" />
+				</geometry>
+				<material name="Red" />
+			</visual>
+        </link>
+
+        <joint name="${sensor_frame}_${name}_joint" type="fixed">
+            <parent link="${name}"/>
+            <child link="${sensor_frame}_laser"/>
+            <origin xyz="${sensor_frame_dx} ${sensor_frame_dy} ${sensor_frame_dz}" rpy="${M_PI} 0 ${M_PI/2}" />
+        </joint>
+
+		<!-- gazebo colour -->
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+        </gazebo>
+
+	</xacro:macro>
+
+</robot>
